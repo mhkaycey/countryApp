@@ -3,10 +3,8 @@ package com.kelechi.countries
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,22 +13,21 @@ import com.kelechi.countries.adapter.myAdapter
 import com.kelechi.countries.model.ModelData
 import com.kelechi.countries.retrofit.ApiInterface
 import com.kelechi.countries.retrofit.RetrofitClient
-import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 
 
-
 class MainActivity : AppCompatActivity() {
 
-lateinit var putIn: Array<ModelData>
-// var modelData: List<ModelData> = ArrayList()
+lateinit var putIn: List<ModelData>
+
     var ivFilter: ImageView? = null
     lateinit var rvCountry: RecyclerView
     //new Add
-   // var adapterT: myAdapter ? = null
+
+    var adapter: myAdapter? = null
 
 
 
@@ -47,7 +44,6 @@ lateinit var putIn: Array<ModelData>
 
 
 
-
         val retrofitClient = RetrofitClient.getInstance()!!.create(ApiInterface::class.java)
 
         retrofitClient.getData().enqueue(object : Callback<List<ModelData>>{
@@ -60,8 +56,11 @@ lateinit var putIn: Array<ModelData>
                 val modelData = response.body()!!
                 rvCountry.layoutManager = LinearLayoutManager(this@MainActivity)
              //   var    adapter = myAdapter(response.body()!!.sortedBy { it.name?.official.toString() })
-             val adapter = myAdapter(response.body()!!)
+           //  val adapter = myAdapter(response.body()!!)
+                adapter = myAdapter(response.body()!!)
+
                 rvCountry.adapter = adapter
+
               //  rvCountry.adapter= myAdapter(response.body()!!)
 
                 adapter!!.setOnitemClickListener(object : myAdapter.onItemClickLister{
@@ -74,7 +73,7 @@ lateinit var putIn: Array<ModelData>
                         intent.putExtra("region", modelData[position].region)
                         intent.putExtra("capital", modelData[position].capital)
                       //  intent.putExtra("Motto", modelData[position].m)
-                        intent.putExtra("language", modelData[position]?.languages!!.eng)
+                        intent.putExtra("language", modelData[position].languages!!.eng)
                         intent.putExtra("subregion", modelData[position].subregion)
                         //intent.putExtra("Government", modelData[position].)
                         intent.putExtra("independent", modelData[position].independent)
@@ -110,20 +109,7 @@ lateinit var putIn: Array<ModelData>
 
     }
 
-    private fun filter(text: String) {
-        //new array list that will hold the filtered data
-        val filteredNames = ArrayList <ModelData > ()
-        //looping through existing elements and adding the element to filtered list
-        putIn!!.filterTo(filteredNames) {
-            //if the existing elements contains the search input
-            it.name?.common?.lowercase()!!.contains(text.lowercase()) || it.name?.common!!.lowercase().contains(text.lowercase())
-           // it.name.toLowerCase().contains(text.lowercase(Locale.ROOT)) || it.name?.common.toLowerCase(Locale.ROOT).contains(text.toLowerCase())
-        }
-        //calling a method of the adapter class and passing the filtered list
-        if (filteredNames != null) {
-            //rvCountry.filterAdapter(filteredNames)
-        }
-    }
+
 
 
     fun onClick() {
@@ -143,7 +129,13 @@ lateinit var putIn: Array<ModelData>
         }
 
     }
+
+
+
 }
+
+
+
 
 
 

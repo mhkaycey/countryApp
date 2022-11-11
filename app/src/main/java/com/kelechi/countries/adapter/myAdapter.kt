@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,9 @@ import com.kelechi.countries.DetailsActivity
 import com.kelechi.countries.model.ModelData
 import com.kelechi.countries.R
 import kotlinx.android.synthetic.main.item_list.view.*
+import java.util.*
+import java.util.Collections.addAll
+import kotlin.collections.ArrayList
 
 class myAdapter(
     private var modelData: List<ModelData>
@@ -26,6 +30,39 @@ private lateinit var  mlistener : onItemClickLister
 fun setOnitemClickListener(listener: onItemClickLister) {
     mlistener = listener
 }
+    fun getFilter(): Filter {
+        return countryFilter
+    }
+
+    private val countryFilter = object : Filter() {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
+            val filteredList: List<ModelData> = ArrayList()
+            if ((constraint == null) || constraint.isEmpty()) {
+                initialDataList.let { filteredList.addAll(it) }
+            } else {
+                val query = constraint.toString().trim().lowercase(Locale.ROOT)
+                initialDataList.forEach {
+                    if (it.name!!.common!!.lowercase(Locale.ROOT).contains(query)) {
+                        filteredList.add(it)
+                    }
+                }
+            }
+            val results = FilterResults()
+            results.values = filteredList
+            return results
+        }
+
+        override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+            if (results?.values is List<*>) {
+                modelData.clear()
+                modelData.addAll(results.values as List<*>)
+                notifyDataSetChanged()
+            }
+        }
+    }
+    val initialDataList = List<ModelData>().apply {
+        modelData.let { addAll(it) }
+    }
 
     class DataViewHolder(itemView: View, listener: onItemClickLister): RecyclerView.ViewHolder(itemView) {
 
@@ -53,13 +90,14 @@ fun setOnitemClickListener(listener: onItemClickLister) {
 
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder {
 
         return DataViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_list, parent, false), mlistener)
     }
 
     override fun onBindViewHolder(holder: DataViewHolder, position: Int) {
-        //val items  = modelData[position]
+
 
       holder.bindData(modelData[position])
 
@@ -68,11 +106,7 @@ fun setOnitemClickListener(listener: onItemClickLister) {
 
     override fun getItemCount(): Int = modelData.size
 
-    fun filterAdapter(filteredNames: ArrayList <ModelData > ) {
-        Log.e("list", filteredNames.toString())
-        Log.e("list", filteredNames.size.toString())
-        // this.dataList.clear()
-        this.modelData = filteredNames
-        notifyDataSetChanged()
-    }
+
+
+
 }
