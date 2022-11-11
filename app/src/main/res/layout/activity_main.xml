@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <EditText
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="7dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/search_bg"
         android:drawableStart="@drawable/ic_search"
-        android:hint="Search Country"
-        android:inputType="textPersonName"
         android:minHeight="48dp"
-
         android:textAlignment="center"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivLogo" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.115" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -43,7 +43,18 @@
         app:layout_constraintBottom_toBottomOf="@+id/spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/spinner"
-        app:srcCompat="@drawable/filter" />
+        app:srcCompat="@drawable/filter_day" />
+
+    <ImageView
+        android:id="@+id/ivFilterNight"
+        android:layout_width="40dp"
+        android:layout_height="46dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/spinner"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/spinner"
+        app:srcCompat="@drawable/filter_dark" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCountries"
@@ -58,11 +69,12 @@
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 
     <ImageView
-        android:id="@+id/ivLogo"
+        android:id="@+id/ivLogoDay"
         android:layout_width="168dp"
         android:layout_height="54dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -70,24 +82,39 @@
         app:srcCompat="@drawable/ex_logo" />
 
     <ImageView
-        android:id="@+id/themeLight"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="@+id/ivLogo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivLogo"
-        app:srcCompat="@drawable/sunny" />
+        android:id="@+id/ivLogoNight"
+        android:layout_width="168dp"
+        android:layout_height="54dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/logo" />
 
-    <ImageView
-        android:id="@+id/themeDark"
-        android:layout_width="50dp"
-        android:layout_height="40dp"
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/themeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/ivLogo"
+        android:thumb="@drawable/theme_switch"
+        app:layout_constraintBottom_toTopOf="@+id/search"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/ivLogo"
-        app:srcCompat="@drawable/moon" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.266" />
+
+    <TextView
+        android:id="@+id/filter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="64dp"
+        android:text="Filter"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ivFilter"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/ivFilter"
+        app:layout_constraintVertical_bias="0.592" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

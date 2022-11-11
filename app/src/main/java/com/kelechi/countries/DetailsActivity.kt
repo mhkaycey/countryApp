@@ -22,7 +22,7 @@ import retrofit2.create
 import java.util.*
 
 class DetailsActivity : AppCompatActivity() {
-    lateinit var  tvCom : TextView
+
     lateinit var Tpopulation : TextView
     lateinit var baseName: String
     lateinit var coatOfArms: String
@@ -35,7 +35,7 @@ class DetailsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_details)
         Objects.requireNonNull(supportActionBar)?.hide()
 
-        tvCom = findViewById(R.id.tvCommon)
+
         Tpopulation = findViewById(R.id.tvPopulation)
         val subregion: TextView = findViewById(R.id.tvEthnic)
         val Tregion: TextView = findViewById(R.id.tvRegion)
@@ -53,7 +53,7 @@ class DetailsActivity : AppCompatActivity() {
         val population = bundle!!.getInt("population").toString()
         val subregion1  = bundle!!.getString("subregion")
         val region = bundle.getString("region")
-        val capital = bundle.getStringArrayList("capital").toString()
+        val capital = bundle.getStringArrayList("capital").toString().removeSurrounding("[", "]")
         val  languages = bundle.getString("language?" )
         val independent = bundle.getBoolean("independent").toString()
         val area = bundle.getDouble("area").toString()
@@ -68,7 +68,7 @@ class DetailsActivity : AppCompatActivity() {
 
         baseName = flag1
         coatOfArms = coat1
-        tvCom.text = flag1
+
         subregion.text = subregion1
         Tpopulation.text = population
         Tregion.text = region
@@ -87,10 +87,7 @@ class DetailsActivity : AppCompatActivity() {
         imageList.add(SlideModel("${baseName}", "flag"))
         imageList.add(SlideModel("${coatOfArms}"))
         imageList.add(SlideModel("$baseName", "flag"))
-//        imageList.add(SlideModel("https://images.immediate.co.uk/production/volatile/sites/3/2019/04/Avengers-Endgame-Banner-2-de7cf60.jpg?quality=90&resize=620,413","Avengers Endgame"))
-//        imageList.add(SlideModel("https://img.cinemablend.com/filter:scale/quill/3/7/0/0/8/e/37008e36e98cd75101cf1347396eac8534871a19.jpg?mw=600","Jumanji"))
-//        imageList.add(SlideModel("https://www.adgully.com/img/800/201711/spider-man-homecoming-banner.jpg","Spider Man"))
-//        imageList.add(SlideModel("https://live.staticflickr.com/1980/29996141587_7886795726_b.jpg","Venom"))
+
 
         imageSlider.setImageList(imageList, ScaleTypes.FIT)
 

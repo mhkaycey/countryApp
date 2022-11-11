@@ -3,9 +3,13 @@ package com.kelechi.countries
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
+import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES
+import androidx.appcompat.widget.SearchView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -21,9 +25,12 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-lateinit var putIn: List<ModelData>
-
-    var ivFilter: ImageView? = null
+    //lateinit var dayFilter: ImageView
+    lateinit var nightFilter: ImageView
+    lateinit var switch: SwitchCompat
+    lateinit var logoDay: ImageView
+    lateinit var logoNight: ImageView
+    lateinit var ivFilter: ImageView
     lateinit var rvCountry: RecyclerView
     //new Add
 
@@ -36,7 +43,11 @@ lateinit var putIn: List<ModelData>
         setContentView(R.layout.activity_main)
         Objects.requireNonNull(supportActionBar)?.hide()
 
-        val EditText: EditText = findViewById(R.id.search)
+        nightFilter = findViewById(R.id.ivFilterNight)
+        switch = findViewById(R.id.themeSwitch)
+        logoDay = findViewById(R.id.ivLogoDay)
+        logoNight = findViewById(R.id.ivLogoNight)
+        val searchView: SearchView= findViewById(R.id.search)
         ivFilter = findViewById(R.id.ivFilter)
         rvCountry = findViewById(R.id.rvCountries)
         rvCountry.layoutManager = LinearLayoutManager(this)
@@ -57,9 +68,10 @@ lateinit var putIn: List<ModelData>
                 rvCountry.layoutManager = LinearLayoutManager(this@MainActivity)
              //   var    adapter = myAdapter(response.body()!!.sortedBy { it.name?.official.toString() })
            //  val adapter = myAdapter(response.body()!!)
-                adapter = myAdapter(response.body()!!)
+                adapter = myAdapter(response.body()!! as ArrayList<ModelData>)
 
                 rvCountry.adapter = adapter
+
 
               //  rvCountry.adapter= myAdapter(response.body()!!)
 
@@ -101,9 +113,40 @@ lateinit var putIn: List<ModelData>
         })
 
 
+    switch.setOnCheckedChangeListener{_, isChecked ->
+        if (switch.isChecked){
+            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES)
+            logoDay.visibility = View.GONE
+            logoNight.visibility = View.VISIBLE
+            ivFilter.visibility = View.GONE
+            nightFilter.visibility = View.VISIBLE
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            logoDay.visibility = View.VISIBLE
+            logoNight.visibility = View.GONE
+            ivFilter.visibility = View.VISIBLE
+            nightFilter.visibility = View.GONE
+
+        }
+    }
+
+
+
 
        onClick()
 
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter?.getFilter()?.filter(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter?.getFilter()?.filter(newText);
+                return true
+            }
+
+        })
 
 
 
@@ -115,20 +158,27 @@ lateinit var putIn: List<ModelData>
     fun onClick() {
 
 
+
         ivFilter?.setOnClickListener {
             val dialog = BottomSheetDialog(this)
+
             val view = layoutInflater.inflate(R.layout.bottom_sheet, null)
 
 
-            dialog.setCancelable(false)
+            dialog.setCancelable(true)
 
 
             dialog.setContentView(view)
 
             dialog.show()
+            val ivClose: ImageView = view.findViewById(R.id.ivClose)
+            ivClose.setOnClickListener {
+                dialog.dismiss()
+            }
         }
 
     }
+
 
 
 

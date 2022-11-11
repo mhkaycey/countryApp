@@ -19,7 +19,7 @@ import java.util.Collections.addAll
 import kotlin.collections.ArrayList
 
 class myAdapter(
-    private var modelData: List<ModelData>
+    private var modelData: ArrayList<ModelData>
     ):RecyclerView.Adapter<myAdapter.DataViewHolder>(){
 
 private lateinit var  mlistener : onItemClickLister
@@ -36,7 +36,7 @@ fun setOnitemClickListener(listener: onItemClickLister) {
 
     private val countryFilter = object : Filter() {
         override fun performFiltering(constraint: CharSequence?): FilterResults {
-            val filteredList: List<ModelData> = ArrayList()
+            val filteredList: ArrayList<ModelData> = ArrayList()
             if ((constraint == null) || constraint.isEmpty()) {
                 initialDataList.let { filteredList.addAll(it) }
             } else {
@@ -53,14 +53,14 @@ fun setOnitemClickListener(listener: onItemClickLister) {
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-            if (results?.values is List<*>) {
+            if (results?.values is ArrayList<*>) {
                 modelData.clear()
-                modelData.addAll(results.values as List<*>)
+                modelData.addAll(results.values as ArrayList<ModelData>)
                 notifyDataSetChanged()
             }
         }
     }
-    val initialDataList = List<ModelData>().apply {
+    val initialDataList = ArrayList<ModelData>().apply {
         modelData.let { addAll(it) }
     }
 
@@ -72,8 +72,8 @@ fun setOnitemClickListener(listener: onItemClickLister) {
         var ivCountry: ImageView = itemView.findViewById(R.id.ivCountry)
 
         fun bindData(modelData: ModelData){
-            tvName.text = modelData.name?.official
-            tvCapital.text = modelData.capital.toString()
+            tvName.text = modelData.name?.official.toString()
+            tvCapital.text = modelData.capital.toString().removeSurrounding("[", "]")
 
             Glide.with(itemView).load(modelData.flags?.png).into(ivCountry)
 //            itemView.tvName.text = modelData.name?.official.toString()
